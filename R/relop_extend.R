@@ -22,7 +22,6 @@ data_table_extend_fns <- list(
 #'
 #' @examples
 #'
-#' scale <- 0.237
 #' dL <- build_frame(
 #'     "subjectID", "surveyCategory"     , "assessmentTotal", "one" |
 #'     1          , "withdrawal behavior", 5                , 1     |
@@ -32,8 +31,8 @@ data_table_extend_fns <- list(
 #' rquery_pipeline <- local_td(dL) %.>%
 #'   extend_nse(.,
 #'              probability %:=%
-#'                exp(assessmentTotal * scale)/
-#'                sum(exp(assessmentTotal * scale)),
+#'                exp(assessmentTotal * 0.237)/
+#'                sum(exp(assessmentTotal * 0.237)),
 #'              count %:=% sum(one),
 #'              rank %:=% rank(),
 #'              orderby = c("assessmentTotal", "surveyCategory"),
@@ -115,9 +114,9 @@ ex_data_table.relop_extend <- function(optree,
                   byi,
                   " ]")
     expr <- parse(text = src)
-    tmpenv <- new.env(parent = env)
+    tmpenv <- new.env(parent = globalenv())
     assign(tmpnam, x, envir = tmpenv)
-    x <- eval(expr, envir = tmpenv, enclos = env)
+    x <- eval(expr, envir = tmpenv, enclos = tmpenv)
   }
   # fast ranking (seems more compatible with this workflow than data.table::frank())
   # could also try a grouped cumsum()

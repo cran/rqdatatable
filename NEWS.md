@@ -1,4 +1,10 @@
 
+# rqdatatable 0.1.2 2018/07/08
+
+  * Adapt to instant execution path.
+  * Don't expect %>>%.
+  * Documentation improvements.
+
 # rqdatatable 0.1.1 2018/06/26
 
   * Don't use isFALSE() (new to R 3.5.0).
