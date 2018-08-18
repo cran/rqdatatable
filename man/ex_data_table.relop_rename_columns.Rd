@@ -4,8 +4,9 @@
 \alias{ex_data_table.relop_rename_columns}
 \title{Rename columns.}
 \usage{
-\method{ex_data_table}{relop_rename_columns}(optree, ..., tables = list(),
-  source_usage = NULL, source_limit = NULL, env = parent.frame())
+\method{ex_data_table}{relop_rename_columns}(optree, ...,
+  tables = list(), source_usage = NULL, source_limit = NULL,
+  env = parent.frame())
 }
 \arguments{
 \item{optree}{relop operations tree.}
@@ -32,6 +33,6 @@ dL <- build_frame(
     3L , "c" )
 rquery_pipeline <- local_td(dL) \%.>\%
   rename_columns(., c("x" = "y", "y" = "x"))
-ex_data_table(rquery_pipeline)[]
+ex_data_table(rquery_pipeline)
 
 }

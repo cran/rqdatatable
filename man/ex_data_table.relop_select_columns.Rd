@@ -4,8 +4,9 @@
 \alias{ex_data_table.relop_select_columns}
 \title{Implement drop columns.}
 \usage{
-\method{ex_data_table}{relop_select_columns}(optree, ..., tables = list(),
-  source_usage = NULL, source_limit = NULL, env = parent.frame())
+\method{ex_data_table}{relop_select_columns}(optree, ...,
+  tables = list(), source_usage = NULL, source_limit = NULL,
+  env = parent.frame())
 }
 \arguments{
 \item{optree}{relop operations tree.}
@@ -28,6 +29,6 @@
 dL <- data.frame(x = 1, y = 2, z = 3)
 rquery_pipeline <- local_td(dL) \%.>\%
   select_columns(., "y")
-ex_data_table(rquery_pipeline)[]
+ex_data_table(rquery_pipeline)
 
 }

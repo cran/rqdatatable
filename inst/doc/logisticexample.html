@@ -12,7 +12,7 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2018-07-28" />
+<meta name="date" content="2018-08-18" />
 
 <title>Logistic Example</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Logistic Example</h1>
 <h4 class="author"><em>John Mount</em></h4>
-<h4 class="date"><em>2018-07-28</em></h4>
+<h4 class="date"><em>2018-08-18</em></h4>
 
 
 
@@ -107,7 +107,7 @@ rquery_pipeline &lt;-<span class="st"> </span><span class="kw">local_td</span>(d
 <span class="st">  </span><span class="kw">orderby</span>(., <span class="st">'subjectID'</span>)</code></pre></div>
 <p>Show expanded form of query tree.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cat</span>(<span class="kw">format</span>(rquery_pipeline))</code></pre></div>
-<pre><code>table('dL'; 
+<pre><code>table(dL; 
   subjectID,
   surveyCategory,
   assessmentTotal) %.&gt;%
@@ -129,7 +129,7 @@ rquery_pipeline &lt;-<span class="st"> </span><span class="kw">local_td</span>(d
    subjectID, diagnosis, probability) %.&gt;%
  orderby(., subjectID)</code></pre>
 <p>Execute the calculation.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ex_data_table</span>(rquery_pipeline)[]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ex_data_table</span>(rquery_pipeline)</code></pre></div>
 <pre><code>##    subjectID           diagnosis probability
 ## 1:         1 withdrawal behavior   0.6706221
 ## 2:         2 positive re-framing   0.5589742</code></pre>

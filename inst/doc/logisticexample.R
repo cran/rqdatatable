@@ -38,5 +38,5 @@ rquery_pipeline <- local_td(dL) %.>%
 cat(format(rquery_pipeline))
 
 ## ------------------------------------------------------------------------
-ex_data_table(rquery_pipeline)[]
+ex_data_table(rquery_pipeline)
 
