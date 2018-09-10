@@ -1,4 +1,9 @@
 
+# rqdatatable 1.0.0 2018/09/10
+
+  * allow no group columns project.
+  * work on ordering in extend.
+
 # rqdatatable 0.1.4 2018/08/18
 
   * More tests.
