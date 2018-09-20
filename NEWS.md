@@ -1,4 +1,9 @@
 
+# rqdatatable 1.1.1 2018/09/20
+
+  * alternate data.table implementation path.
+  * force parent.frame.
+
 # rqdatatable 1.0.0 2018/09/10
 
   * allow no group columns project.

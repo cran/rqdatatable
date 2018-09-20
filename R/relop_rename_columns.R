@@ -24,6 +24,7 @@ ex_data_table.relop_rename_columns <- function(optree,
                                                source_usage = NULL,
                                                source_limit = NULL,
                                                env = parent.frame()) {
+  force(env)
   wrapr::stop_if_dot_args(substitute(list(...)), "rqdatatable::ex_data_table.relop_rename_columns")
   if(is.null(source_usage)) {
     source_usage <- columns_used(optree)
@@ -33,8 +34,7 @@ ex_data_table.relop_rename_columns <- function(optree,
                      source_usage = source_usage,
                      source_limit = source_limit,
                      env = env)
-  data.table::setnames(x, old = as.character(optree$cmap), new = names(optree$cmap))
-  x
+  data.table::setnames(x, old = as.character(optree$cmap), new = names(optree$cmap))[]
 }
 
 
