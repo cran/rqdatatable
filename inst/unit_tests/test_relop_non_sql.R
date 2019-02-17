@@ -1,10 +1,6 @@
 
 
-library("rqdatatable")
-context("relop_non_sql")
-
-test_that("relop_non_sql works as expected", {
-
+test_relop_non_sql <- function() {
 
  # a node generator is something an expert can
  # write and part-time R users can use.
@@ -84,31 +80,6 @@ test_that("relop_non_sql works as expected", {
 
  ex_data_table(rquery_pipeline)[]
 
- if (requireNamespace("DBI", quietly = TRUE) &&
-     requireNamespace("RSQLite", quietly = TRUE)) {
-   # example database connection
-   my_db <- DBI::dbConnect(RSQLite::SQLite(),
-                           ":memory:")
-
-   rquery::to_sql(rquery_pipeline, my_db) %.>%
-     print(.)
-
-   dR <- rquery::rq_copy_to(my_db,
-                            d = d,
-                            table_name = "d",
-                            overwrite = TRUE,
-                            temporary = TRUE)
-   tbl <- rquery::materialize(my_db, rquery_pipeline,
-                              overwrite = FALSE,
-                              temporary = TRUE)
-   DBI::dbReadTable(my_db, tbl$table_name) %.>%
-     print(.)
-
-   DBI::dbDisconnect(my_db)
- }
-
-
-
  set.seed(3252)
  d <- data.frame(a = rnorm(1000), b = rnorm(1000))
 
@@ -119,6 +90,7 @@ test_that("relop_non_sql works as expected", {
  p2 <- local_td(d) %.>%
    rsummary_node(.)
  res <- ex_data_table(p2)
- expect_true(data.table::is.data.table(res))
+ RUnit::checkTrue(data.table::is.data.table(res))
 
-})
+ invisible(NULL)
+}

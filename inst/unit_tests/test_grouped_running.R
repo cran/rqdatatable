@@ -1,7 +1,5 @@
-library("rqdatatable")
-context("grouped_running_ops")
 
-test_that("test_grouped_running.R", {
+test_grouped_running <- function() {
 
   data <- wrapr::build_frame(
       "x", "y" |
@@ -31,6 +29,7 @@ test_that("test_grouped_running.R", {
       0  , 0  , 1               |
       0  , 0  , 1               )
 
-  testthat::expect_equivalent(res, expect)
+  RUnit::checkEquals(res, expect)
 
-})
+  invisible(NULL)
+}
