@@ -30,6 +30,7 @@ ex_data_table.relop_list <- function(optree,
                          source_usage = source_usage,
                          source_limit = source_limit,
                          env = env)
+    res <- data.frame(res) # break away from reference semantics
     tables[[table_name]] <- res
   }
   res
