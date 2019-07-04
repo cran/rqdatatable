@@ -12,7 +12,7 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2019-06-01" />
+<meta name="date" content="2019-07-04" />
 
 <title>Grouped Sampling</title>
 
@@ -303,7 +303,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Grouped Sampling</h1>
 <h4 class="author">John Mount</h4>
-<h4 class="date">2019-06-01</h4>
+<h4 class="date">2019-07-04</h4>
 
 
 
@@ -383,12 +383,15 @@ DBI::dbDisconnect(db)</code></pre>
 ## 6: a a b 30135 0.25620100          3</code></pre>
 <p>The translations available are listed in the package variable <code>rqdatatable:::data_table_extend_fns</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">str</span>(rqdatatable<span class="op">:::</span>data_table_extend_fns)</a></code></pre></div>
-<pre><code>## List of 4
+<pre><code>## List of 5
 ##  $ rank      :List of 2
 ##   ..$ data.table_version: chr &quot;cumsum(rqdatatable_temp_one_col)&quot;
 ##   ..$ need_one_col      : logi TRUE
 ##  $ row_number:List of 2
 ##   ..$ data.table_version: chr &quot;cumsum(rqdatatable_temp_one_col)&quot;
+##   ..$ need_one_col      : logi TRUE
+##  $ n         :List of 2
+##   ..$ data.table_version: chr &quot;sum(rqdatatable_temp_one_col)&quot;
 ##   ..$ need_one_col      : logi TRUE
 ##  $ random    :List of 2
 ##   ..$ data.table_version: chr &quot;runif(.N)&quot;

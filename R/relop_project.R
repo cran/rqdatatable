@@ -14,11 +14,10 @@
 #'     2          , "withdrawal behavior", 3                 |
 #'     2          , "positive re-framing", 4                 )
 #' test_p <- local_td(dL) %.>%
-#'   extend_nse(.,
-#'              one %:=% 1) %.>%
 #'   project_nse(.,
 #'               maxscore = max(assessmentTotal),
-#'               groupby = 'subjectID')
+#'               groupby = 'subjectID',
+#'               count = n())
 #' cat(format(test_p))
 #' ex_data_table(test_p)
 #'
@@ -32,9 +31,6 @@ ex_data_table.relop_project <- function(optree,
   force(env)
   wrapr::stop_if_dot_args(substitute(list(...)), "rqdatatable::ex_data_table.relop_project")
   n <- length(optree$parsed)
-  if(n<0) {
-    stop("rqdatatable::ex_data_table.relop_project() must have at least one assignment")
-  }
   if(is.null(source_usage)) {
     source_usage <- columns_used(optree)
   }
@@ -48,25 +44,37 @@ ex_data_table.relop_project <- function(optree,
     pterms <- paste0("\"", optree$groupby, "\"")
     byi <- paste0(" , by = c(", paste(pterms, collapse = ", "), ")")
   }
-  tmpnam <- ".rquery_ex_extend_tmp"
+  tmpnam <- ".rquery_ex_project_tmp"
   tmpenv <- patch_global_child_env(env)
   assign(tmpnam, x, envir = tmpenv)
-  enames <-
-    vapply(seq_len(n),
-           function(i) {
-             paste0("\"", optree$parsed[[i]]$symbols_produced, "\"")
-           }, character(1))
-  eexprs <-
-    vapply(seq_len(n),
-           function(i) {
-             strip_up_through_first_assignment(as.character(optree$parsed[[i]]$presentation))
-           }, character(1))
+  cols_to_remove <- character(0)
+  rqdatatable_temp_one_col <- NULL # don't look like an unbound reference
+  if(n>0) {
+    prepped <- prepare_prased_assignments_for_data_table(optree$parsed)
+    enames <- prepped$enames
+    eexprs <- prepped$eexprs
+    if(prepped$need_one_col) {
+      x[ , rqdatatable_temp_one_col := 1.0]
+    }
+    cols_to_remove <- "rqdatatable_temp_one_col"
+  } else {
+    enames <- "RQDATATABLE_FAKE_COL"
+    eexprs <- "1"
+    cols_to_remove <- enames
+    need_one_col <- FALSE
+  }
   # := notation means add columns to current data.table, j notation would move to summize type calc.
   src <- paste0(tmpnam, "[ ",
                 " , j = list(", paste(paste(enames, "=", eexprs), collapse = ", "), ") ",
                 byi,
                 " ]")
   expr <- parse(text = src)
-  eval(expr, envir = tmpenv, enclos = tmpenv)
+  res <- eval(expr, envir = tmpenv, enclos = tmpenv)
+  if(length(cols_to_remove)>0) {
+    for(ci in cols_to_remove) {
+      res[[ci]] <- NULL
+    }
+  }
+  res
 }
 
