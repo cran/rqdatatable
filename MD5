@@ -1,6 +1,6 @@
-9290dc35bc557fd5104b6952750c4b29 *DESCRIPTION
+54f0a1de74ad753443bcb06e759953f9 *DESCRIPTION
 71766360829266f3f1a0681927d8c1fe *NAMESPACE
-aa433a5a4e18ede12a583e0fdb6aba3a *NEWS.md
+80293b4469d50c51ed93bf3266e0f7af *NEWS.md
 31eafd7ab5282d4633caab7d5b49d561 *R/data_table_exports.R
 e2829299167c44e431d0e3d45e6053b4 *R/ex_relop_list.R
 a923527d1ad437f3f850a2862d564315 *R/execute_parallel.R
@@ -10,7 +10,7 @@ ef4703d62ca1991be28ae0376feae01f *R/patch_env.R
 0eecd0cc02656923327037d0c83b4e62 *R/relop_drop_columns.R
 1282637adf21acb3604979406bcb65db *R/relop_extend.R
 564c4fdd8b4b66f26e18d538eb04f0a4 *R/relop_natural_join.R
-5b701611e2d259762a56424c2609b9f5 *R/relop_non_sql.R
+08eca78597cf9419451e153faad0dc34 *R/relop_non_sql.R
 14099e12d95c097f254eead8d0522c26 *R/relop_null_replace.R
 936e2d47df28a2248938c8b9743e7cf4 *R/relop_order_expr.R
 82cd964c9657a18535717cefe5a88d9f *R/relop_orderby.R
@@ -24,7 +24,7 @@ a7a6d82391d5d0f6faf05badda84f91b *R/relop_select_columns.R
 9f93927574c83d130aba48c6537fd0c5 *R/relop_theta_join.R
 423865bc156e0130d9b7821da9c2ed48 *R/relop_unionall.R
 90e874aba1e31f2b89d638f8f5d61ddc *R/rexp_rquery.R
-6e9c16239e5a56c005fe2a0530263caf *R/rq_ufn.R
+5a1f4656ea9861f83a58ce17838241cb *R/rq_ufn.R
 458abb381f5bb550af250b9f1d2a8428 *R/rquery_fns.R
 036ecd235f2d774ad2d4c700343a0c5b *R/run_rqdatatable_tests.R
 5e2964d286b890097da537ce55ad1983 *R/ufn_rq.R
@@ -33,13 +33,13 @@ a7a6d82391d5d0f6faf05badda84f91b *R/relop_select_columns.R
 b586f5c3433cb1304ccb271822a3802e *build/vignette.rds
 c7baad1c35313e3d0e378973fa8fd908 *inst/doc/GroupedSampling.R
 2b44c87ce1daf9e3e4a421167eb4bbe7 *inst/doc/GroupedSampling.Rmd
-04caff667c4765dd814ce0b04b2a3576 *inst/doc/GroupedSampling.html
+3328e31cacd3aba15421f53790b6c377 *inst/doc/GroupedSampling.html
 88809e687272f45fe9c25d8f12928b48 *inst/doc/R_mapping.R
 51f669d72adc870d72f08356d7a51c0a *inst/doc/R_mapping.Rmd
-7e1b82a5960aa57c0ac674d9cfc5a5bb *inst/doc/R_mapping.html
+84839719bc945afc072b4120e0ddce17 *inst/doc/R_mapping.html
 5fe117854e0fec4914f03fb7f47673f3 *inst/doc/logisticexample.R
 a45b934927eea7a385cd2602588880ff *inst/doc/logisticexample.Rmd
-216d4dd7acabd2ba45e580f784e6bb53 *inst/doc/logisticexample.html
+6f301cacbdf2da2cde9656c5b72606df *inst/doc/logisticexample.html
 cb27976b485b79afe44ef05ff642aa58 *inst/unit_tests/test_assoc.R
 7bc69515e1d8656851309e87463db2c7 *inst/unit_tests/test_colon.R
 32dbb58664ef2a5b148bad9a4eb648e1 *inst/unit_tests/test_cross_join.R
@@ -100,11 +100,11 @@ aa416850167881c735e4765b3f7f159a *man/layout_to_rowrecs_data_table.Rd
 e0165524ae5638b0c9e7efb845cc55d4 *man/make_dt_lookup_by_column.Rd
 6ce8a11fd827e296238445b07ab00402 *man/rbindlist_data_table.Rd
 fff30720a961f102d78af08cf67b758d *man/reexports.Rd
-7495d6b267e87a94598bef284fafa987 *man/rq_df_funciton_node.Rd
+59e21f0de3faf80594aaaa334cf38348 *man/rq_df_funciton_node.Rd
 6d043e504d27573b707a0192976dc215 *man/rq_df_grouped_funciton_node.Rd
 13b9ac0fbe0da218f033b3f0e502f911 *man/rq_fn_wrapper.Rd
 21a4b88057377f6f858034f38ce1f5f9 *man/rq_u_fn_w-class.Rd
-5c8025bfa8d5045bdfadfc2860811a24 *man/rq_ufn.Rd
+7ff09ddac3ab28bbf2a42d70e18439a2 *man/rq_ufn.Rd
 ecafb4e53aa770b1056d0d871667f106 *man/rqdatatable.Rd
 12132e77d705b67a521908d3496b8c0c *man/run_rqdatatable_tests.Rd
 060a36467d58ad9d69956b1ccf65d663 *man/show-rq_u_fn_w-method.Rd

@@ -1,4 +1,9 @@
 
+# rqdatatable 1.2.0 2019/08/19
+
+ * Move to new f_db signature.
+ * Adjust license.
+
 # rqdatatable 1.1.9 2019/07/04
 
  * Use non-strict let().
