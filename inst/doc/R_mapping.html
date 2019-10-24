@@ -13,7 +13,7 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2019-09-13" />
+<meta name="date" content="2019-10-23" />
 
 <title>R mapping</title>
 
@@ -23,7 +23,7 @@
 <style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -36,11 +36,13 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
 pre.numberSource a.sourceLine::before
   { content: attr(data-line-number);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -304,7 +306,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">R mapping</h1>
 <h4 class="author">John Mount</h4>
-<h4 class="date">2019-09-13</h4>
+<h4 class="date">2019-10-23</h4>
 
 
 
@@ -390,7 +392,10 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </table>
 <p>The common re-mappings are can be found in the package-private variable <code>rqdatatable:::data_table_extend_fns</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">str</span>(rqdatatable<span class="op">:::</span>data_table_extend_fns)</a></code></pre></div>
-<pre><code>## List of 5
+<pre><code>## List of 6
+##  $ ngroup    :List of 2
+##   ..$ data.table_version: chr &quot;.GRP&quot;
+##   ..$ need_one_col      : logi TRUE
 ##  $ rank      :List of 2
 ##   ..$ data.table_version: chr &quot;cumsum(rqdatatable_temp_one_col)&quot;
 ##   ..$ need_one_col      : logi TRUE

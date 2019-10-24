@@ -6,6 +6,7 @@ strip_up_through_first_assignment <- function(s) {
 }
 
 data_table_extend_fns <- list(
+  ngroup = list(data.table_version = ".GRP", need_one_col = TRUE),
   rank = list(data.table_version = "cumsum(rqdatatable_temp_one_col)", need_one_col = TRUE),
   row_number = list(data.table_version = "cumsum(rqdatatable_temp_one_col)", need_one_col = TRUE),
   n = list(data.table_version = "sum(rqdatatable_temp_one_col)", need_one_col = TRUE),
@@ -144,7 +145,7 @@ ex_data_table.relop_extend <- function(optree,
   }
   # fast ranking (seems more compatible with this workflow than data.table::frank())
   # could also try a grouped cumsum()
-  if(need_one_col) {
+  if('rqdatatable_temp_one_col' %in% colnames(x)) {
     x[ , rqdatatable_temp_one_col := NULL]
   }
   x[]
