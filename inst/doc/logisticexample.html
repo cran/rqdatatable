@@ -13,7 +13,7 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2019-10-23" />
+<meta name="date" content="2019-11-12" />
 
 <title>Logistic Example</title>
 
@@ -23,7 +23,7 @@
 <style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -36,13 +36,11 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
+  { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
   { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -306,49 +304,48 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Logistic Example</h1>
 <h4 class="author">John Mount</h4>
-<h4 class="date">2019-10-23</h4>
+<h4 class="date">2019-11-12</h4>
 
 
 
 <p>We can work an example similar to the <a href="https://winvector.github.io/rquery/"><code>rquery</code></a> <a href="https://winvector.github.io/rquery/index.html">example</a> using a <a href="http://r-datatable.com/"><code>data.table</code></a> back-end.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(<span class="st">&quot;rqdatatable&quot;</span>)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(<span class="st">&quot;data.table&quot;</span>)</a></code></pre></div>
-<pre><code>## Warning: package 'data.table' was built under R version 3.5.2</code></pre>
 <pre><code>## 
 ## Attaching package: 'data.table'</code></pre>
 <pre><code>## The following object is masked from 'package:wrapr':
 ## 
 ##     :=</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># data example</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">dL &lt;-<span class="st"> </span>wrapr<span class="op">::</span><span class="kw">build_frame</span>(</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">   <span class="st">&quot;subjectID&quot;</span>, <span class="st">&quot;surveyCategory&quot;</span>     , <span class="st">&quot;assessmentTotal&quot;</span> <span class="op">|</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">   </span><span class="dv">1</span>          , <span class="st">&quot;withdrawal behavior&quot;</span>, <span class="dv">5</span>                 <span class="op">|</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="st">   </span><span class="dv">1</span>          , <span class="st">&quot;positive re-framing&quot;</span>, <span class="dv">2</span>                 <span class="op">|</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="st">   </span><span class="dv">2</span>          , <span class="st">&quot;withdrawal behavior&quot;</span>, <span class="dv">3</span>                 <span class="op">|</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="st">   </span><span class="dv">2</span>          , <span class="st">&quot;positive re-framing&quot;</span>, <span class="dv">4</span>                 )</a></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">scale &lt;-<span class="st"> </span><span class="fl">0.237</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co"># example rquery pipeline</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">rquery_pipeline &lt;-<span class="st"> </span><span class="kw">local_td</span>(dL) <span class="op">%.&gt;%</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="st">  </span><span class="kw">extend_nse</span>(.,</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">             <span class="dt">one =</span> <span class="dv">1</span>) <span class="op">%.&gt;%</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="st">  </span><span class="kw">extend_nse</span>(.,</a>
-<a class="sourceLine" id="cb6-8" data-line-number="8">             <span class="dt">probability =</span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9">               <span class="kw">exp</span>(assessmentTotal <span class="op">*</span><span class="st"> </span>scale)<span class="op">/</span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="st">               </span><span class="kw">sum</span>(<span class="kw">exp</span>(assessmentTotal <span class="op">*</span><span class="st"> </span>scale)),</a>
-<a class="sourceLine" id="cb6-11" data-line-number="11">             <span class="dt">count =</span> <span class="kw">sum</span>(one),</a>
-<a class="sourceLine" id="cb6-12" data-line-number="12">             <span class="dt">rank =</span> <span class="kw">rank</span>(probability, surveyCategory),</a>
-<a class="sourceLine" id="cb6-13" data-line-number="13">             <span class="dt">partitionby =</span> <span class="st">'subjectID'</span>) <span class="op">%.&gt;%</span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="st">  </span><span class="kw">extend_nse</span>(.,</a>
-<a class="sourceLine" id="cb6-15" data-line-number="15">             <span class="dt">isdiagnosis =</span> rank <span class="op">==</span><span class="st"> </span>count,</a>
-<a class="sourceLine" id="cb6-16" data-line-number="16">             <span class="dt">diagnosis =</span> surveyCategory) <span class="op">%.&gt;%</span></a>
-<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="st">  </span><span class="kw">select_rows_nse</span>(., </a>
-<a class="sourceLine" id="cb6-18" data-line-number="18">                  isdiagnosis <span class="op">==</span><span class="st"> </span><span class="ot">TRUE</span>) <span class="op">%.&gt;%</span></a>
-<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="st">  </span><span class="kw">select_columns</span>(., </a>
-<a class="sourceLine" id="cb6-20" data-line-number="20">                 <span class="kw">c</span>(<span class="st">'subjectID'</span>, <span class="st">'diagnosis'</span>, <span class="st">'probability'</span>)) <span class="op">%.&gt;%</span></a>
-<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="st">  </span><span class="kw">orderby</span>(., <span class="st">'subjectID'</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># data example</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">dL &lt;-<span class="st"> </span>wrapr<span class="op">::</span><span class="kw">build_frame</span>(</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">   <span class="st">&quot;subjectID&quot;</span>, <span class="st">&quot;surveyCategory&quot;</span>     , <span class="st">&quot;assessmentTotal&quot;</span> <span class="op">|</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">   </span><span class="dv">1</span>          , <span class="st">&quot;withdrawal behavior&quot;</span>, <span class="dv">5</span>                 <span class="op">|</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="st">   </span><span class="dv">1</span>          , <span class="st">&quot;positive re-framing&quot;</span>, <span class="dv">2</span>                 <span class="op">|</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="st">   </span><span class="dv">2</span>          , <span class="st">&quot;withdrawal behavior&quot;</span>, <span class="dv">3</span>                 <span class="op">|</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="st">   </span><span class="dv">2</span>          , <span class="st">&quot;positive re-framing&quot;</span>, <span class="dv">4</span>                 )</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">scale &lt;-<span class="st"> </span><span class="fl">0.237</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co"># example rquery pipeline</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">rquery_pipeline &lt;-<span class="st"> </span><span class="kw">local_td</span>(dL) <span class="op">%.&gt;%</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="st">  </span><span class="kw">extend_nse</span>(.,</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">             <span class="dt">one =</span> <span class="dv">1</span>) <span class="op">%.&gt;%</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="st">  </span><span class="kw">extend_nse</span>(.,</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">             <span class="dt">probability =</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9">               <span class="kw">exp</span>(assessmentTotal <span class="op">*</span><span class="st"> </span>scale)<span class="op">/</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="st">               </span><span class="kw">sum</span>(<span class="kw">exp</span>(assessmentTotal <span class="op">*</span><span class="st"> </span>scale)),</a>
+<a class="sourceLine" id="cb5-11" data-line-number="11">             <span class="dt">count =</span> <span class="kw">sum</span>(one),</a>
+<a class="sourceLine" id="cb5-12" data-line-number="12">             <span class="dt">rank =</span> <span class="kw">rank</span>(probability, surveyCategory),</a>
+<a class="sourceLine" id="cb5-13" data-line-number="13">             <span class="dt">partitionby =</span> <span class="st">'subjectID'</span>) <span class="op">%.&gt;%</span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="st">  </span><span class="kw">extend_nse</span>(.,</a>
+<a class="sourceLine" id="cb5-15" data-line-number="15">             <span class="dt">isdiagnosis =</span> rank <span class="op">==</span><span class="st"> </span>count,</a>
+<a class="sourceLine" id="cb5-16" data-line-number="16">             <span class="dt">diagnosis =</span> surveyCategory) <span class="op">%.&gt;%</span></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="st">  </span><span class="kw">select_rows_nse</span>(., </a>
+<a class="sourceLine" id="cb5-18" data-line-number="18">                  isdiagnosis <span class="op">==</span><span class="st"> </span><span class="ot">TRUE</span>) <span class="op">%.&gt;%</span></a>
+<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="st">  </span><span class="kw">select_columns</span>(., </a>
+<a class="sourceLine" id="cb5-20" data-line-number="20">                 <span class="kw">c</span>(<span class="st">'subjectID'</span>, <span class="st">'diagnosis'</span>, <span class="st">'probability'</span>)) <span class="op">%.&gt;%</span></a>
+<a class="sourceLine" id="cb5-21" data-line-number="21"><span class="st">  </span><span class="kw">orderby</span>(., <span class="st">'subjectID'</span>)</a></code></pre></div>
 <p>Show expanded form of query tree.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">format</span>(rquery_pipeline))</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">format</span>(rquery_pipeline))</a></code></pre></div>
 <pre><code>mk_td(&quot;dL&quot;, c(
   &quot;subjectID&quot;,
   &quot;surveyCategory&quot;,
@@ -371,14 +368,14 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
   diagnosis := surveyCategory) %.&gt;%
  select_rows(.,
    isdiagnosis == TRUE) %.&gt;%
- select_columns(., c(
-   &quot;subjectID&quot;, &quot;diagnosis&quot;, &quot;probability&quot;)) %.&gt;%
+ select_columns(., 
+    c('subjectID', 'diagnosis', 'probability')) %.&gt;%
  order_rows(.,
   c('subjectID'),
   reverse = c(),
   limit = NULL)</code></pre>
 <p>Execute the calculation.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">ex_data_table</span>(rquery_pipeline)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">ex_data_table</span>(rquery_pipeline)</a></code></pre></div>
 <pre><code>##    subjectID           diagnosis probability
 ## 1:         1 withdrawal behavior   0.6706221
 ## 2:         2 positive re-framing   0.5589742</code></pre>
