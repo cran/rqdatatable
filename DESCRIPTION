@@ -1,8 +1,8 @@
 Package: rqdatatable
 Type: Package
 Title: 'rquery' for 'data.table'
-Version: 1.2.6
-Date: 2020-01-29
+Version: 1.2.7
+Date: 2020-02-11
 Authors@R: c(
     person("John", "Mount", email = "jmount@win-vector.com", role = c("aut", "cre")),
     person(family = "Win-Vector LLC", role = c("cph"))
@@ -18,13 +18,13 @@ Encoding: UTF-8
 LazyData: true
 ByteCompile: true
 VignetteBuilder: knitr
-Depends: R (>= 3.4.0), rquery (>= 1.4.2)
-Imports: wrapr (>= 1.9.6), data.table (>= 1.12.2)
+Depends: R (>= 3.4.0), wrapr (>= 1.9.6), rquery (>= 1.4.3)
+Imports: data.table (>= 1.12.2)
 RoxygenNote: 7.0.2
 Suggests: knitr, rmarkdown, DBI, RSQLite, parallel, RUnit
 NeedsCompilation: no
-Packaged: 2020-01-29 17:49:02 UTC; johnmount
+Packaged: 2020-02-11 16:37:49 UTC; johnmount
 Author: John Mount [aut, cre],
   Win-Vector LLC [cph]
 Repository: CRAN
-Date/Publication: 2020-01-29 18:50:02 UTC
+Date/Publication: 2020-02-11 17:00:06 UTC

@@ -1,4 +1,10 @@
 
+# rqdatatable 1.2.7 2020/02/11
+
+ * Move wrapr to Depends.
+ * Delete some unsuable as-functions.
+ * Fix up documentation relative to ex_data_table_step.
+
 # rqdatatable 1.2.6 2020/01/29
 
  * Return data.frame if we start with data.frame.
