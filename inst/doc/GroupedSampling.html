@@ -12,17 +12,33 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2020-02-11" />
+<meta name="date" content="2020-08-12" />
 
 <title>Grouped Sampling</title>
 
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -32,14 +48,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -48,9 +66,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -301,36 +319,36 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Grouped Sampling</h1>
 <h4 class="author">John Mount</h4>
-<h4 class="date">2020-02-11</h4>
+<h4 class="date">2020-08-12</h4>
 
 
 
 <p>This is an example of the current idiomatic way to sample per-group using <a href="https://github.com/WinVector/rqdatatable"><code>rqdatatable</code></a> or <a href="https://github.com/WinVector/rquery"><code>rquery</code></a>.</p>
 <p>The idea is to use a random order and per-group row numbering. This works well in-memory.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(<span class="st">&quot;rqdatatable&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;rqdatatable&quot;</span>)</span></code></pre></div>
 <pre><code>## Loading required package: wrapr</code></pre>
 <pre><code>## Loading required package: rquery</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="dv">100000</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">set.seed</span>(<span class="dv">325235</span>)</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">d &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">  <span class="dt">x =</span> <span class="kw">sample</span>(letters, n, <span class="dt">replace =</span> <span class="ot">TRUE</span>),</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">  <span class="dt">y =</span> <span class="kw">sample</span>(letters, n, <span class="dt">replace =</span> <span class="ot">TRUE</span>),</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">  <span class="dt">z =</span> <span class="kw">sample</span>(letters, n, <span class="dt">replace =</span> <span class="ot">TRUE</span>),</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">  <span class="dt">id =</span> <span class="kw">seq_len</span>(n),</a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10">grouping_vars &lt;-<span class="st"> </span><span class="kw">qc</span>(x, y, z)</a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12">sample_ops &lt;-<span class="st"> </span><span class="kw">local_td</span>(d) <span class="op">%.&gt;%</span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="st">  </span><span class="kw">extend_nse</span>(., one <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%.&gt;%</span></a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="st">  </span><span class="kw">extend_nse</span>(., ord <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">runif</span>(<span class="kw">sum</span>(one))) <span class="op">%.&gt;%</span></a>
-<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="st">  </span><span class="kw">pick_top_k</span>(., </a>
-<a class="sourceLine" id="cb4-16" data-line-number="16">             <span class="dt">k =</span> <span class="dv">5</span>,</a>
-<a class="sourceLine" id="cb4-17" data-line-number="17">             <span class="dt">partitionby =</span> grouping_vars,</a>
-<a class="sourceLine" id="cb4-18" data-line-number="18">             <span class="dt">orderby =</span> <span class="st">&quot;ord&quot;</span>)</a>
-<a class="sourceLine" id="cb4-19" data-line-number="19"></a>
-<a class="sourceLine" id="cb4-20" data-line-number="20">samp &lt;-<span class="st"> </span><span class="kw">ex_data_table</span>(sample_ops)</a>
-<a class="sourceLine" id="cb4-21" data-line-number="21"><span class="kw">head</span>(samp)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>n &lt;-<span class="st"> </span><span class="dv">100000</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">set.seed</span>(<span class="dv">325235</span>)</span>
+<span id="cb4-3"><a href="#cb4-3"></a>d &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
+<span id="cb4-4"><a href="#cb4-4"></a>  <span class="dt">x =</span> <span class="kw">sample</span>(letters, n, <span class="dt">replace =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb4-5"><a href="#cb4-5"></a>  <span class="dt">y =</span> <span class="kw">sample</span>(letters, n, <span class="dt">replace =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb4-6"><a href="#cb4-6"></a>  <span class="dt">z =</span> <span class="kw">sample</span>(letters, n, <span class="dt">replace =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb4-7"><a href="#cb4-7"></a>  <span class="dt">id =</span> <span class="kw">seq_len</span>(n),</span>
+<span id="cb4-8"><a href="#cb4-8"></a>  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb4-9"><a href="#cb4-9"></a></span>
+<span id="cb4-10"><a href="#cb4-10"></a>grouping_vars &lt;-<span class="st"> </span><span class="kw">qc</span>(x, y, z)</span>
+<span id="cb4-11"><a href="#cb4-11"></a></span>
+<span id="cb4-12"><a href="#cb4-12"></a>sample_ops &lt;-<span class="st"> </span><span class="kw">local_td</span>(d) <span class="op">%.&gt;%</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="st">  </span><span class="kw">extend_nse</span>(., <span class="dt">one :=</span> <span class="dv">1</span>) <span class="op">%.&gt;%</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="st">  </span><span class="kw">extend_nse</span>(., <span class="dt">ord :=</span> <span class="kw">runif</span>(<span class="kw">sum</span>(one))) <span class="op">%.&gt;%</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="st">  </span><span class="kw">pick_top_k</span>(., </span>
+<span id="cb4-16"><a href="#cb4-16"></a>             <span class="dt">k =</span> <span class="dv">5</span>,</span>
+<span id="cb4-17"><a href="#cb4-17"></a>             <span class="dt">partitionby =</span> grouping_vars,</span>
+<span id="cb4-18"><a href="#cb4-18"></a>             <span class="dt">orderby =</span> <span class="st">&quot;ord&quot;</span>)</span>
+<span id="cb4-19"><a href="#cb4-19"></a></span>
+<span id="cb4-20"><a href="#cb4-20"></a>samp &lt;-<span class="st"> </span><span class="kw">ex_data_table</span>(sample_ops)</span>
+<span id="cb4-21"><a href="#cb4-21"></a><span class="kw">head</span>(samp)</span></code></pre></div>
 <pre><code>##   x y z    id one        ord row_number
 ## 1 a a a 99342   1 0.29592013          1
 ## 2 a a a 41989   1 0.45891485          2
@@ -343,10 +361,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <pre><code>library(&quot;rquery&quot;)
 
 db &lt;- DBI::dbConnect(RPostgreSQL::PostgreSQL(),
-                     host = 'localhost',
+                     host = &#39;localhost&#39;,
                      port = 5432,
-                     user = 'johnmount',
-                     password = '')
+                     user = &#39;johnmount&#39;,
+                     password = &#39;&#39;)
 
 rq_copy_to(db, &quot;d&quot;, d,
            overwrite = TRUE,
@@ -364,15 +382,15 @@ samp &lt;- execute(db, sample_ops, allow_executor = FALSE)
 DBI::dbDisconnect(db)</code></pre>
 <p>The main issue is the different notation used in each pipeline to land the random column.</p>
 <p>We can unify this by supplying translations from some common database notations (such as no-argument <code>random()</code>) to the <code>data.table</code> implementation.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">sample_ops &lt;-<span class="st"> </span><span class="kw">local_td</span>(d) <span class="op">%.&gt;%</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span><span class="kw">extend_nse</span>(., ord <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">random</span>()) <span class="op">%.&gt;%</span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="st">  </span><span class="kw">pick_top_k</span>(., </a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">             <span class="dt">k =</span> <span class="dv">5</span>,</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">             <span class="dt">partitionby =</span> grouping_vars,</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">             <span class="dt">orderby =</span> <span class="st">&quot;ord&quot;</span>)</a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8">samp &lt;-<span class="st"> </span><span class="kw">ex_data_table</span>(sample_ops)</a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="kw">head</span>(samp)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>sample_ops &lt;-<span class="st"> </span><span class="kw">local_td</span>(d) <span class="op">%.&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="st">  </span><span class="kw">extend_nse</span>(., <span class="dt">ord :=</span> <span class="kw">random</span>()) <span class="op">%.&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="st">  </span><span class="kw">pick_top_k</span>(., </span>
+<span id="cb7-4"><a href="#cb7-4"></a>             <span class="dt">k =</span> <span class="dv">5</span>,</span>
+<span id="cb7-5"><a href="#cb7-5"></a>             <span class="dt">partitionby =</span> grouping_vars,</span>
+<span id="cb7-6"><a href="#cb7-6"></a>             <span class="dt">orderby =</span> <span class="st">&quot;ord&quot;</span>)</span>
+<span id="cb7-7"><a href="#cb7-7"></a></span>
+<span id="cb7-8"><a href="#cb7-8"></a>samp &lt;-<span class="st"> </span><span class="kw">ex_data_table</span>(sample_ops)</span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="kw">head</span>(samp)</span></code></pre></div>
 <pre><code>##   x y z    id        ord row_number
 ## 1 a a a 12254 0.47605028          1
 ## 2 a a a 41989 0.61569890          2
@@ -381,7 +399,7 @@ DBI::dbDisconnect(db)</code></pre>
 ## 5 a a b 59731 0.03065273          2
 ## 6 a a b 30135 0.25620100          3</code></pre>
 <p>The translations available are listed in the package variable <code>rqdatatable:::data_table_extend_fns</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">str</span>(rqdatatable<span class="op">:::</span>data_table_extend_fns)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">str</span>(rqdatatable<span class="op">:::</span>data_table_extend_fns)</span></code></pre></div>
 <pre><code>## List of 6
 ##  $ ngroup    :List of 2
 ##   ..$ data.table_version: chr &quot;.GRP&quot;

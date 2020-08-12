@@ -12,17 +12,33 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2020-02-11" />
+<meta name="date" content="2020-08-12" />
 
 <title>R mapping</title>
 
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -32,14 +48,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -48,9 +66,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -301,36 +319,36 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">R mapping</h1>
 <h4 class="author">John Mount</h4>
-<h4 class="date">2020-02-11</h4>
+<h4 class="date">2020-08-12</h4>
 
 
 
 <p><code>rqdatatable</code> re-maps a number of symbols for <code>data.table</code> translation (for <code>rquery</code>/<code>SQL</code> re-mappings, please see <a href="https://winvector.github.io/rquery/articles/R_mapping.html">here</a>). For instance, please take note of the <code>n()</code> and <code>rank()</code> functions in the following code example.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(<span class="st">&quot;rqdatatable&quot;</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(<span class="st">&quot;wrapr&quot;</span>)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">dL &lt;-<span class="st"> </span><span class="kw">build_frame</span>(</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">  <span class="st">&quot;subjectID&quot;</span>, <span class="st">&quot;surveyCategory&quot;</span>     , <span class="st">&quot;assessmentTotal&quot;</span><span class="op">|</span></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="st">    </span><span class="dv">1</span>          , <span class="st">&quot;withdrawal behavior&quot;</span>, <span class="dv">5</span>              <span class="op">|</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="st">    </span><span class="dv">1</span>          , <span class="st">&quot;positive re-framing&quot;</span>, <span class="dv">2</span>              <span class="op">|</span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="st">    </span><span class="dv">2</span>          , <span class="st">&quot;withdrawal behavior&quot;</span>, <span class="dv">3</span>              <span class="op">|</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="st">    </span><span class="dv">2</span>          , <span class="st">&quot;positive re-framing&quot;</span>, <span class="dv">4</span>              <span class="op">|</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="st">    </span><span class="dv">2</span>          , <span class="st">&quot;other&quot;</span>              , <span class="dv">0</span>              )</a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb1-12" data-line-number="12">scale &lt;-<span class="st"> </span><span class="fl">0.237</span></a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">rquery_pipeline &lt;-<span class="st"> </span><span class="kw">local_td</span>(dL) <span class="op">%.&gt;%</span></a>
-<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="st">  </span><span class="kw">extend_nse</span>(.,</a>
-<a class="sourceLine" id="cb1-15" data-line-number="15">             probability <span class="op">:</span><span class="er">=</span></a>
-<a class="sourceLine" id="cb1-16" data-line-number="16"><span class="st">               </span><span class="kw">exp</span>(assessmentTotal <span class="op">*</span><span class="st"> </span>scale)<span class="op">/</span></a>
-<a class="sourceLine" id="cb1-17" data-line-number="17"><span class="st">               </span><span class="kw">sum</span>(<span class="kw">exp</span>(assessmentTotal <span class="op">*</span><span class="st"> </span>scale)),</a>
-<a class="sourceLine" id="cb1-18" data-line-number="18">             count <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">n</span>(),</a>
-<a class="sourceLine" id="cb1-19" data-line-number="19">             rank <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">rank</span>(),</a>
-<a class="sourceLine" id="cb1-20" data-line-number="20">             <span class="dt">orderby =</span> <span class="kw">c</span>(<span class="st">&quot;assessmentTotal&quot;</span>, <span class="st">&quot;surveyCategory&quot;</span>),</a>
-<a class="sourceLine" id="cb1-21" data-line-number="21">             <span class="dt">reverse =</span> <span class="kw">c</span>(<span class="st">&quot;assessmentTotal&quot;</span>),</a>
-<a class="sourceLine" id="cb1-22" data-line-number="22">             <span class="dt">partitionby =</span> <span class="st">'subjectID'</span>)  <span class="op">%.&gt;%</span></a>
-<a class="sourceLine" id="cb1-23" data-line-number="23"><span class="st">  </span><span class="kw">orderby</span>(., <span class="kw">c</span>(<span class="st">&quot;subjectID&quot;</span>, <span class="st">&quot;probability&quot;</span>))</a>
-<a class="sourceLine" id="cb1-24" data-line-number="24">res &lt;-<span class="st"> </span><span class="kw">ex_data_table</span>(rquery_pipeline, <span class="dt">tables =</span> <span class="kw">list</span>(<span class="dt">dL =</span> dL))</a>
-<a class="sourceLine" id="cb1-25" data-line-number="25">knitr<span class="op">::</span><span class="kw">kable</span>(res)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;rqdatatable&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(<span class="st">&quot;wrapr&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a>dL &lt;-<span class="st"> </span><span class="kw">build_frame</span>(</span>
+<span id="cb1-5"><a href="#cb1-5"></a>  <span class="st">&quot;subjectID&quot;</span>, <span class="st">&quot;surveyCategory&quot;</span>     , <span class="st">&quot;assessmentTotal&quot;</span><span class="op">|</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="st">    </span><span class="dv">1</span>          , <span class="st">&quot;withdrawal behavior&quot;</span>, <span class="dv">5</span>              <span class="op">|</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="st">    </span><span class="dv">1</span>          , <span class="st">&quot;positive re-framing&quot;</span>, <span class="dv">2</span>              <span class="op">|</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="st">    </span><span class="dv">2</span>          , <span class="st">&quot;withdrawal behavior&quot;</span>, <span class="dv">3</span>              <span class="op">|</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="st">    </span><span class="dv">2</span>          , <span class="st">&quot;positive re-framing&quot;</span>, <span class="dv">4</span>              <span class="op">|</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="st">    </span><span class="dv">2</span>          , <span class="st">&quot;other&quot;</span>              , <span class="dv">0</span>              )</span>
+<span id="cb1-11"><a href="#cb1-11"></a></span>
+<span id="cb1-12"><a href="#cb1-12"></a>scale &lt;-<span class="st"> </span><span class="fl">0.237</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a>rquery_pipeline &lt;-<span class="st"> </span><span class="kw">local_td</span>(dL) <span class="op">%.&gt;%</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="st">  </span><span class="kw">extend_nse</span>(.,</span>
+<span id="cb1-15"><a href="#cb1-15"></a>             <span class="dt">probability :=</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a>               <span class="kw">exp</span>(assessmentTotal <span class="op">*</span><span class="st"> </span>scale)<span class="op">/</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="st">               </span><span class="kw">sum</span>(<span class="kw">exp</span>(assessmentTotal <span class="op">*</span><span class="st"> </span>scale)),</span>
+<span id="cb1-18"><a href="#cb1-18"></a>             <span class="dt">count :=</span> <span class="kw">n</span>(),</span>
+<span id="cb1-19"><a href="#cb1-19"></a>             <span class="dt">rank :=</span> <span class="kw">rank</span>(),</span>
+<span id="cb1-20"><a href="#cb1-20"></a>             <span class="dt">orderby =</span> <span class="kw">c</span>(<span class="st">&quot;assessmentTotal&quot;</span>, <span class="st">&quot;surveyCategory&quot;</span>),</span>
+<span id="cb1-21"><a href="#cb1-21"></a>             <span class="dt">reverse =</span> <span class="kw">c</span>(<span class="st">&quot;assessmentTotal&quot;</span>),</span>
+<span id="cb1-22"><a href="#cb1-22"></a>             <span class="dt">partitionby =</span> <span class="st">&#39;subjectID&#39;</span>)  <span class="op">%.&gt;%</span></span>
+<span id="cb1-23"><a href="#cb1-23"></a><span class="st">  </span><span class="kw">orderby</span>(., <span class="kw">c</span>(<span class="st">&quot;subjectID&quot;</span>, <span class="st">&quot;probability&quot;</span>))</span>
+<span id="cb1-24"><a href="#cb1-24"></a>res &lt;-<span class="st"> </span><span class="kw">ex_data_table</span>(rquery_pipeline, <span class="dt">tables =</span> <span class="kw">list</span>(<span class="dt">dL =</span> dL))</span>
+<span id="cb1-25"><a href="#cb1-25"></a>knitr<span class="op">::</span><span class="kw">kable</span>(res)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -386,7 +404,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tbody>
 </table>
 <p>The common re-mappings are can be found in the package-private variable <code>rqdatatable:::data_table_extend_fns</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">str</span>(rqdatatable<span class="op">:::</span>data_table_extend_fns)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">str</span>(rqdatatable<span class="op">:::</span>data_table_extend_fns)</span></code></pre></div>
 <pre><code>## List of 6
 ##  $ ngroup    :List of 2
 ##   ..$ data.table_version: chr &quot;.GRP&quot;

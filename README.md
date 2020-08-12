@@ -9,9 +9,9 @@
 [`rqdatatable`](https://github.com/WinVector/rqdatatable) is an
 implementation of the [`rquery`](https://github.com/WinVector/rquery)
 piped Codd-style relational algebra hosted on
-[`data.table`](http://r-datatable.com). `rquery` allow the expression of
-complex transformations as a series of relational operators and
-`rqdatatable` implements the operators using `data.table`.
+[`data.table`](https://rdatatable.gitlab.io/data.table/). `rquery` allow
+the expression of complex transformations as a series of relational
+operators and `rqdatatable` implements the operators using `data.table`.
 
 A `Python` version of `rquery`/`rqdatatable` is under initial
 development as
@@ -20,7 +20,7 @@ development as
 For example scoring a logistic regression model (which requires
 grouping, ordering, and ranking) is organized as follows. For more on
 this example please see [“Let’s Have Some Sympathy For The Part-time R
-User”](http://www.win-vector.com/blog/2017/08/lets-have-some-sympathy-for-the-part-time-r-user/).
+User”](https://win-vector.com/2017/08/04/lets-have-some-sympathy-for-the-part-time-r-user/).
 
 ``` r
 library("rqdatatable")
@@ -120,15 +120,31 @@ build_frame(
     ## 1         7 positive re-framing   0.9722128
 
 Initial bench-marking of `rqdatatable` is very favorable (notes
-[here](http://www.win-vector.com/blog/2018/06/rqdatatable-rquery-powered-by-data-table/)).
-
-Related work includes:
-
-  - [`dtplyr`](https://github.com/tidyverse/dtplyr)
-  - [`table.express`](https://github.com/asardaes/table.express)
-  - [`tidydt`](https://github.com/markfairbanks/tidydt)
+[here](https://win-vector.com/2018/06/03/rqdatatable-rquery-powered-by-data-table/)).
 
 To install `rqdatatable` please use `install.packages("rqdatatable")`.
+
+Some related work includes:
+
+  - [`data.table`](https://rdatatable.gitlab.io/data.table/)
+  - [`disk.frame`](https://github.com/xiaodaigh/disk.frame)
+  - [`dbplyr`](https://dbplyr.tidyverse.org)
+  - [`dplyr`](https://dplyr.tidyverse.org)
+  - [`dtplyr`](https://github.com/tidyverse/dtplyr)
+  - [`maditr`](https://github.com/gdemin/maditr)
+  - [`nc`](https://github.com/tdhock/nc)
+  - [`poorman`](https://github.com/nathaneastwood/poorman)
+  - [`rquery`](https://github.com/WinVector/rquery)
+  - [`SparkR`](https://CRAN.R-project.org/package=SparkR)
+  - [`sparklyr`](https://spark.rstudio.com)
+  - [`sqldf`](https://github.com/ggrothendieck/sqldf)
+  - [`table.express`](https://github.com/asardaes/table.express)
+  - [`tidyfast`](https://github.com/TysonStanley/tidyfast)
+  - [`tidyfst`](https://github.com/hope-data-science/tidyfst)
+  - [`tidyquery`](https://github.com/ianmcook/tidyquery)
+  - [`tidyr`](https://tidyr.tidyverse.org)
+  - [`tidytable`](https://github.com/markfairbanks/tidytable) (formerly
+    `gdt`/`tidydt`)
 
 –
 
