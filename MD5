@@ -1,6 +1,6 @@
-e55bf4b992968d56803ca2d299e05f4a *DESCRIPTION
+b9e21cd07f07763753a16c2bc3973b63 *DESCRIPTION
 adfe800d5d551bcb9223af241b041fbe *NAMESPACE
-f15fc1c41b8de18577c9cdfa92184f32 *NEWS.md
+ff6fbc4e7a9755537b01025ea26efc3e *NEWS.md
 7a2e478cdbd6db7e77009b6aa9780d1f *R/data_table_exports.R
 d93487db85138d49ab61c26c01327dcb *R/execute_parallel.R
 f27ef64111db9d86f035d30fbfef327e *R/make_dt_lookup_by_column.R
@@ -28,13 +28,13 @@ a7d87b21b7550aaa9218c5423d183d78 *README.md
 f7e5560d09f7ac0045608ae52d80d961 *build/vignette.rds
 271757dc9587dc8533439d8dfc0db9e2 *inst/doc/GroupedSampling.R
 2b44c87ce1daf9e3e4a421167eb4bbe7 *inst/doc/GroupedSampling.Rmd
-b925aba496160a7d8f39943780fffe98 *inst/doc/GroupedSampling.html
+52fa78a6b19d5ef8bb90b4778b376207 *inst/doc/GroupedSampling.html
 0fab2204d3eb57b7690fe93f7737dcb4 *inst/doc/R_mapping.R
 51f669d72adc870d72f08356d7a51c0a *inst/doc/R_mapping.Rmd
-e47847d4581899975e3df9535132de39 *inst/doc/R_mapping.html
+cd50e9a3bb24bb564b408eb86530beb8 *inst/doc/R_mapping.html
 a7ccae19dc7bb3fd84b10edbb23943f9 *inst/doc/logisticexample.R
 121151cb7c923e4e233a1d82a9b99812 *inst/doc/logisticexample.Rmd
-2f985d201e33753ad14d461a5249f758 *inst/doc/logisticexample.html
+f5894823f3be0ef812b4afcac0e991a4 *inst/doc/logisticexample.html
 94c820f6e7d7aedc40dce447ba615268 *inst/tinytest/test_assoc.R
 5e9d5f7ab57de90e2d5044a906b74a40 *inst/tinytest/test_colon.R
 fb44e901e4948a037aa83c52c4665eac *inst/tinytest/test_cross_join.R
