@@ -1,6 +1,5 @@
 ## -----------------------------------------------------------------------------
 library("rqdatatable")
-library("data.table")
 
 ## -----------------------------------------------------------------------------
 # data example
@@ -23,8 +22,11 @@ rquery_pipeline <- local_td(dL) %.>%
                exp(assessmentTotal * scale)/
                sum(exp(assessmentTotal * scale)),
              count = sum(one),
-             rank = rank(probability, surveyCategory),
              partitionby = 'subjectID') %.>%
+  extend_nse(.,
+             rank = cumsum(one),
+             partitionby = 'subjectID',
+             orderby = c('probability', 'surveyCategory')) %.>%
   extend_nse(.,
              isdiagnosis = rank == count,
              diagnosis = surveyCategory) %.>%

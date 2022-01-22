@@ -12,7 +12,7 @@
 
 <meta name="author" content="John Mount" />
 
-<meta name="date" content="2021-06-11" />
+<meta name="date" content="2022-01-22" />
 
 <title>Logistic Example</title>
 
@@ -141,48 +141,45 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">Logistic Example</h1>
 <h4 class="author">John Mount</h4>
-<h4 class="date">2021-06-11</h4>
+<h4 class="date">2022-01-22</h4>
 
 
 
 <p>We can work an example similar to the <a href="https://winvector.github.io/rquery/"><code>rquery</code></a> <a href="https://winvector.github.io/rquery/index.html">example</a> using a <a href="https://rdatatable.gitlab.io/data.table/"><code>data.table</code></a> back-end.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;rqdatatable&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;data.table&quot;</span>)</span></code></pre></div>
-<pre><code>## 
-## Attaching package: &#39;data.table&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:wrapr&#39;:
-## 
-##     :=</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># data example</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>dL <span class="ot">&lt;-</span> wrapr<span class="sc">::</span><span class="fu">build_frame</span>(</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;subjectID&quot;</span>, <span class="st">&quot;surveyCategory&quot;</span>     , <span class="st">&quot;assessmentTotal&quot;</span> <span class="sc">|</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>   <span class="dv">1</span>          , <span class="st">&quot;withdrawal behavior&quot;</span>, <span class="dv">5</span>                 <span class="sc">|</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>   <span class="dv">1</span>          , <span class="st">&quot;positive re-framing&quot;</span>, <span class="dv">2</span>                 <span class="sc">|</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>   <span class="dv">2</span>          , <span class="st">&quot;withdrawal behavior&quot;</span>, <span class="dv">3</span>                 <span class="sc">|</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>   <span class="dv">2</span>          , <span class="st">&quot;positive re-framing&quot;</span>, <span class="dv">4</span>                 )</span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>scale <span class="ot">&lt;-</span> <span class="fl">0.237</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># example rquery pipeline</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>rquery_pipeline <span class="ot">&lt;-</span> <span class="fu">local_td</span>(dL) <span class="sc">%.&gt;%</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extend_nse</span>(.,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">one =</span> <span class="dv">1</span>) <span class="sc">%.&gt;%</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extend_nse</span>(.,</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">probability =</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>               <span class="fu">exp</span>(assessmentTotal <span class="sc">*</span> scale)<span class="sc">/</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>               <span class="fu">sum</span>(<span class="fu">exp</span>(assessmentTotal <span class="sc">*</span> scale)),</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">count =</span> <span class="fu">sum</span>(one),</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">rank =</span> <span class="fu">rank</span>(probability, surveyCategory),</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">partitionby =</span> <span class="st">&#39;subjectID&#39;</span>) <span class="sc">%.&gt;%</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extend_nse</span>(.,</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">isdiagnosis =</span> rank <span class="sc">==</span> count,</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">diagnosis =</span> surveyCategory) <span class="sc">%.&gt;%</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select_rows_nse</span>(., </span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>                  isdiagnosis <span class="sc">==</span> <span class="cn">TRUE</span>) <span class="sc">%.&gt;%</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select_columns</span>(., </span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">c</span>(<span class="st">&#39;subjectID&#39;</span>, <span class="st">&#39;diagnosis&#39;</span>, <span class="st">&#39;probability&#39;</span>)) <span class="sc">%.&gt;%</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">orderby</span>(., <span class="st">&#39;subjectID&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;rqdatatable&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># data example</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dL <span class="ot">&lt;-</span> wrapr<span class="sc">::</span><span class="fu">build_frame</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;subjectID&quot;</span>, <span class="st">&quot;surveyCategory&quot;</span>     , <span class="st">&quot;assessmentTotal&quot;</span> <span class="sc">|</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>   <span class="dv">1</span>          , <span class="st">&quot;withdrawal behavior&quot;</span>, <span class="dv">5</span>                 <span class="sc">|</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>   <span class="dv">1</span>          , <span class="st">&quot;positive re-framing&quot;</span>, <span class="dv">2</span>                 <span class="sc">|</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>   <span class="dv">2</span>          , <span class="st">&quot;withdrawal behavior&quot;</span>, <span class="dv">3</span>                 <span class="sc">|</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>   <span class="dv">2</span>          , <span class="st">&quot;positive re-framing&quot;</span>, <span class="dv">4</span>                 )</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>scale <span class="ot">&lt;-</span> <span class="fl">0.237</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># example rquery pipeline</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>rquery_pipeline <span class="ot">&lt;-</span> <span class="fu">local_td</span>(dL) <span class="sc">%.&gt;%</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extend_nse</span>(.,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">one =</span> <span class="dv">1</span>) <span class="sc">%.&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extend_nse</span>(.,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">probability =</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>               <span class="fu">exp</span>(assessmentTotal <span class="sc">*</span> scale)<span class="sc">/</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>               <span class="fu">sum</span>(<span class="fu">exp</span>(assessmentTotal <span class="sc">*</span> scale)),</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">count =</span> <span class="fu">sum</span>(one),</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">partitionby =</span> <span class="st">&#39;subjectID&#39;</span>) <span class="sc">%.&gt;%</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extend_nse</span>(.,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">rank =</span> <span class="fu">cumsum</span>(one),</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">partitionby =</span> <span class="st">&#39;subjectID&#39;</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">orderby =</span> <span class="fu">c</span>(<span class="st">&#39;probability&#39;</span>, <span class="st">&#39;surveyCategory&#39;</span>)) <span class="sc">%.&gt;%</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extend_nse</span>(.,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>             <span class="at">isdiagnosis =</span> rank <span class="sc">==</span> count,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>             <span class="at">diagnosis =</span> surveyCategory) <span class="sc">%.&gt;%</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select_rows_nse</span>(., </span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>                  isdiagnosis <span class="sc">==</span> <span class="cn">TRUE</span>) <span class="sc">%.&gt;%</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select_columns</span>(., </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">c</span>(<span class="st">&#39;subjectID&#39;</span>, <span class="st">&#39;diagnosis&#39;</span>, <span class="st">&#39;probability&#39;</span>)) <span class="sc">%.&gt;%</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">orderby</span>(., <span class="st">&#39;subjectID&#39;</span>)</span></code></pre></div>
 <p>Show expanded form of query tree.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">format</span>(rquery_pipeline))</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">format</span>(rquery_pipeline))</span></code></pre></div>
 <pre><code>mk_td(&quot;dL&quot;, c(
   &quot;subjectID&quot;,
   &quot;surveyCategory&quot;,
@@ -196,9 +193,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   orderby = c(),
   reverse = c()) %.&gt;%
  extend(.,
-  rank := rank(probability, surveyCategory),
+  rank := cumsum(one),
   partitionby = c(&#39;subjectID&#39;),
-  orderby = c(),
+  orderby = c(&#39;probability&#39;, &#39;surveyCategory&#39;),
   reverse = c()) %.&gt;%
  extend(.,
   isdiagnosis := rank == count,
@@ -212,7 +209,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   reverse = c(),
   limit = NULL)</code></pre>
 <p>Execute the calculation.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ex_data_table</span>(rquery_pipeline)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ex_data_table</span>(rquery_pipeline)</span></code></pre></div>
 <pre><code>##   subjectID           diagnosis probability
 ## 1         1 withdrawal behavior   0.6706221
 ## 2         2 positive re-framing   0.5589742</code></pre>
